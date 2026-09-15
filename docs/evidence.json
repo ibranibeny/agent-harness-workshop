@@ -1,0 +1,122 @@
+[
+  {
+    "id": "00-prerequisites",
+    "title": "Step 0 - Prerequisites",
+    "command": "node --version && npm.cmd --version && git --version && azd version",
+    "scope": "Actual installed tool versions on the verification computer. No sign-in was performed by this command.",
+    "at": "2026-09-15T10:23:20.907Z",
+    "exitCode": 0,
+    "revision": "",
+    "output": "v24.16.0\r\n11.13.0\ngit version 2.55.0.windows.3\nazd version 1.27.0 (commit dcd7c53153bada76c3c9462b57fab53d4f8b69a0) (stable)\nUpdate available: 1.27.0 -> 1.34.0 (https://github.com/Azure/azure-dev/releases/tag/azure-dev-cli_1.34.0)\nTo update, run `winget upgrade Microsoft.Azd`\n",
+    "image": "00-prerequisites.png"
+  },
+  {
+    "id": "01-clone",
+    "title": "Step 1 - Clone from GitHub",
+    "command": "git clone https://github.com/ibranibeny/agent-harness-workshop.git",
+    "scope": "Actual HTTPS clone of the public repository into a new directory outside OneDrive.",
+    "at": "2026-09-15T10:23:22.617Z",
+    "exitCode": 0,
+    "revision": "",
+    "output": "Cloning into 'agent-harness-workshop'...\n",
+    "image": "01-clone.png"
+  },
+  {
+    "id": "02-install",
+    "title": "Step 2 - Install locked dependencies",
+    "command": "npm.cmd ci --ignore-scripts",
+    "scope": "Fresh dependency installation from the cloned lockfile; no package lifecycle scripts.",
+    "at": "2026-09-15T10:23:27.249Z",
+    "exitCode": 0,
+    "revision": "5dca404",
+    "output": "\nadded 175 packages, and audited 176 packages in 1m\n\n50 packages are looking for funding\n  run `npm fund` for details\n\nfound 0 vulnerabilities\n",
+    "image": "02-install.png"
+  },
+  {
+    "id": "03-configuration",
+    "title": "Step 3 - Validate private configuration",
+    "command": "node --env-file=.env --input-type=module -e \"import { validateConfiguration } from './src/config.mjs'; validateConfiguration(); console.log('Configuration valid; values not printed.');\" && git check-ignore .env",
+    "scope": "Existing approved resource metadata was written privately to an ignored .env. This capture proves syntax validation and exclusion from Git, not resource creation.",
+    "at": "2026-09-15T10:25:38.117Z",
+    "exitCode": 0,
+    "revision": "5dca404",
+    "output": "Configuration valid; values not printed.\n.env\n",
+    "image": "03-configuration.png"
+  },
+  {
+    "id": "04-doctor",
+    "title": "Step 4 - Verify the existing developer session",
+    "command": "npm.cmd run doctor",
+    "scope": "Real Entra identity verification using the existing authorized Azure Developer CLI session. Account, tenant, endpoint and user path are redacted. This is not an interactive login or an inference test.",
+    "at": "2026-09-15T10:25:38.421Z",
+    "exitCode": 0,
+    "revision": "5dca404",
+    "output": "\n> agent-harness-lab@1.0.0 doctor\n> node --env-file-if-exists=.env src/doctor.mjs\n\n{\n  \"status\": \"identity_verified\",\n  \"tenantId\": \"[REDACTED]\",\n  \"account\": \"[REDACTED]\",\n  \"endpoint\": \"[REDACTED]\",\n  \"deployment\": \"gpt-56-sol\",\n  \"dataDir\": \"C:\\\\Users\\\\[REDACTED]\\\\AppData\\\\Local\\\\AgentHarnessPublishing\\\\fresh-runtime\",\n  \"note\": \"No LLM call made. Run npm.cmd run test:live for a billable inference test.\"\n}\n",
+    "image": "04-doctor.png"
+  },
+  {
+    "id": "05-tests",
+    "title": "Step 5 - Deterministic tests",
+    "command": "npm.cmd test",
+    "scope": "Complete deterministic suite from the fresh public clone. Controlled model/connector fixtures are used where appropriate; this does not establish live cloud or WebIQ access.",
+    "at": "2026-09-15T10:25:46.386Z",
+    "exitCode": 0,
+    "revision": "5dca404",
+    "output": "\n> agent-harness-lab@1.0.0 test\n> node --test tests/unit.test.mjs\n\n✔ identity guard accepts only the configured account and tenant (1283.9984ms)\n✔ model pacing uses the verified Sol request and token limits (1.0014ms)\n✔ travel research uses the configured WebIQ connector and never substitutes sample results (1952.3024ms)\n✔ Foundry tool schemas expose valid next actions without unsupported URI formats (30.4329ms)\n✔ optional sequential planning still calls the actual local MCP server (2761.8344ms)\n✔ travel weather validates calendar dates and preserves forecast uncertainty (16.6466ms)\n✔ harness permits direct WebIQ research without a planning prerequisite (23.78ms)\n✔ harness supports optional planning and direct clarification (724.2523ms)\n✔ WebIQ cancellation aborts a stalled initialized notification (84.3784ms)\n✔ travel PDF is real, approval-gated and delivery uses only the saved itinerary (351.1536ms)\n✔ atomic JSON replacement tolerates transient locks and preserves old data on persistent failure (973.4128ms)\n✔ real file tools reject traversal and unknown arguments (12.4486ms)\n✔ calculator computes actual costs and rejects invalid input (10.7685ms)\n✔ writes require approval; memory survives recreation of tool registry (37.0709ms)\n✔ harness feeds real tool results back, then stops on final response (17.389ms)\n✔ harness continuation retains the reviewed itinerary and still requires exact approval (11.1822ms)\n✔ harness stops repeated calls at maxSteps and handles cancelled runs (14.4681ms)\n✔ harness default token budget allows longer runs and stops at 100000 (14.7035ms)\n✔ harness returns tool errors to model and enforces token budget (11.3748ms)\n✔ conversation history restores linked completed runs without replaying actions (74.3705ms)\n✔ local HTTP API rejects cross-origin, missing session token and malformed requests (133.5947ms)\n✔ HTTP continuation restores a persisted draft and binds approval to the new run (482.5167ms)\n✔ dashboard discards a stale run response after history selection changes (72.5333ms)\nℹ tests 23\nℹ suites 0\nℹ pass 23\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 9269.0248\n",
+    "image": "05-tests.png"
+  },
+  {
+    "id": "06-live",
+    "title": "Step 5b - Billable live inference",
+    "command": "npm.cmd run test:live",
+    "scope": "Actual Foundry model request, local add_numbers execution and model continuation. This does not verify travel sources, PDF generation or Microsoft 365 delivery.",
+    "at": "2026-09-15T10:26:12.724Z",
+    "exitCode": 0,
+    "revision": "5dca404",
+    "output": "\n> agent-harness-lab@1.0.0 test:live\n> node --env-file-if-exists=.env --test tests/live.test.mjs\n\n{\"evidence\":\"REAL_FOUNDRY\",\"account\":\"[REDACTED]\",\"tenant\":\"[REDACTED]\",\"requestIds\":[\"cff27973-a243-441a-bd5c-4e128a00cbbb\",\"6a3ca91a-9900-4400-bcc6-7b0b146831cd\"],\"responseIds\":[\"chatcmpl-EOKefX51X4yvt4oHrPpwOmdqyUfUT\",\"chatcmpl-EOKejOf0XnX7RNux59dWIuuaJaSDw\"],\"model\":\"gpt-5.6-sol-2026-07-09\",\"tool\":\"add_numbers\",\"answer\":\"42\",\"tokens\":368}\n✔ LIVE: Foundry returns a real tool call and consumes its real result (10111.2501ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 10225.6126\n",
+    "image": "06-live.png"
+  },
+  {
+    "id": "07-start",
+    "title": "Step 6 - Start the isolated local app",
+    "command": "npm.cmd start",
+    "scope": "Actual startup output. A separate port and runtime directory keep the original lab undisturbed. The server was running when captured; identity and path metadata are redacted.",
+    "at": "2026-09-15T10:26:37.424Z",
+    "exitCode": "running",
+    "revision": "5dca404",
+    "output": "\n> agent-harness-lab@1.0.0 start\n> node --env-file-if-exists=.env src/server.mjs\n\nAgent Harness Lab: http://127.0.0.1:4327\nFoundry: gpt-56-sol | [REDACTED]\nRuntime: [REDACTED]\\AppData\\Local\\AgentHarnessPublishing\\fresh-runtime\n",
+    "image": "07-start.png"
+  },
+  {
+    "id": "08-dashboard",
+    "title": "Step 6b - Running dashboard",
+    "scope": "Actual fresh-clone browser UI before the travel run. Solid redaction blocks cover identity metadata and the local runtime path.",
+    "at": "2026-09-15T10:27:59.625Z",
+    "revision": "5dca404",
+    "image": "08-dashboard.png"
+  },
+  {
+    "id": "09-research",
+    "title": "Step 7 - Real WebIQ research",
+    "scope": "Actual completed travel run: 5 model responses, 33,749 reported tokens. One overlong interests argument was rejected; subsequent WebIQ destination and weather calls returned real observations. Exact-date forecast coverage was not verified.",
+    "at": "2026-09-15T10:30:12.642Z",
+    "revision": "5dca404",
+    "image": "09-research.png"
+  },
+  {
+    "id": "10-approval",
+    "title": "Step 8 - Exact PDF approval preview",
+    "scope": "Actual follow-up in the same conversation reached export_itinerary_pdf on its first model response, with no repeated research. The proposal was pending when captured. This is not a saved PDF.",
+    "at": "2026-09-15T10:33:12.155Z",
+    "revision": "5dca404",
+    "image": "10-approval.png"
+  },
+  {
+    "id": "11-denied",
+    "title": "Step 9 - Denial without a PDF",
+    "scope": "The proposal was denied through the browser. The actual tool observation reports denied:true, the PDF endpoint returned 404, and an independent filesystem check found no PDF. No email, calendar, PDF or preference write was approved.",
+    "at": "2026-09-15T10:34:10.691Z",
+    "revision": "5dca404",
+    "image": "11-denied.png"
+  }
+]

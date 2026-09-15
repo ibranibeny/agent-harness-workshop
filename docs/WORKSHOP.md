@@ -23,7 +23,7 @@ An LLM generates text and structured tool-call proposals. An **agent** combines 
 
 Microsoft Learn recommends starting with the lowest sufficient orchestration complexity. A single agent with multiple tools often solves a cohesive problem without the latency and coordination cost of multiple agents. This lab implements that pattern in JavaScript. It does **not** use the Microsoft Agent Framework SDK; the Learn concepts guide its design, not its package selection. See [AI agent orchestration patterns](https://learn.microsoft.com/azure/architecture/ai-ml/guide/ai-agent-design-patterns).
 
-**Model Context Protocol (MCP)** standardizes communication with tool servers. It does not decide whether a tool is safe, whether the caller has permission, or whether returned content is true. The harness retains those responsibilities. Read [MCP and AI agents](https://learn.microsoft.com/azure/developer/ai/intro-agents-mcp).
+**Model Context Protocol (MCP)** standardizes communication with tool servers. It does not decide whether a tool is safe, whether the caller has permission, or whether returned content is true. The harness retains those responsibilities. Read the language-independent [MCP client-server architecture](https://learn.microsoft.com/dotnet/ai/get-started-mcp#mcp-client-server-architecture) and [Foundry MCP security practices](https://learn.microsoft.com/azure/foundry/agents/how-to/tools/model-context-protocol#best-practices). The .NET article supplies protocol concepts only; this lab uses Node.js.
 
 | Element | Job in this lab | What it is not |
 |---|---|---|
@@ -163,6 +163,8 @@ npm.cmd run doctor
 
 **Check:** doctor reports `identity_verified` for your configured tenant and account. Its output contains identity and endpoint metadata: do not publish it unredacted. The screenshot evidence uses an existing authorized session rather than re-enacting sign-in. Doctor obtains an Entra token and checks identity; it does **not** call the LLM or prove inference permission.
 
+Authentication reference: [AzureDeveloperCliCredential for JavaScript](https://learn.microsoft.com/javascript/api/@azure/identity/azuredeveloperclicredential).
+
 ### Step 5: Run The Deterministic Tests
 
 ```powershell
@@ -192,6 +194,10 @@ Open the loopback URL printed by the server, normally `http://127.0.0.1:4317`. I
 ### Screenshot Evidence
 
 The [execution evidence section](index.html#evidence) contains screenshots for prerequisite checks, clone, install, configuration, doctor, tests, startup and the application workflow. Command screenshots are **an evidence viewer rendering captured process output**, not screenshots of a simulated terminal. Identity values and user paths are redacted. Every capture states what it proves and what it does not prove.
+
+Verification used public source revision `5dca404`, Node.js 24.16.0, and a separately authorized `gpt-5.6-sol` deployment. All 23 deterministic tests and the live arithmetic test passed on the fresh clone. An earlier staging run hit a transient Windows `EPERM` rename lock; the isolated test and later full runs passed without a code change. The capture helper also required a Windows quoting correction before configuration verification. These preparation issues are not presented as application successes.
+
+The travel run made real WebIQ calls and completed in five model responses using 33,749 reported tokens. One initial `search_destination` proposal exceeded the local 300-character `interests` limit and was rejected; the model corrected it before successful research. Exact-date forecast coverage remained unverified. Generated travel text is an observed model answer, not independently certified travel advice.
 
 ## 6. Lab A: Direct Research
 
