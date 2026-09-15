@@ -38,6 +38,6 @@ Enter your tenant, permitted sign-in account, commercial Azure OpenAI endpoint, 
 
 ## Source And Tests
 
-`src/harness.mjs` owns the model/tool loop; `src/tools.mjs` owns validation and approval; `src/connectors.mjs` owns MCP transport; `src/store.mjs` owns persistence and history reconstruction. The [workshop Markdown](docs/WORKSHOP.md) and [L400 Markdown](docs/L400.md) explain the contracts and failure modes.
+`src/harness.mjs` owns the model/tool loop; `src/tools.mjs` owns validation and approval; `src/connectors.mjs` owns MCP transport; `src/store.mjs` owns persistence and history reconstruction. The [workshop Markdown](WORKSHOP.md) and [L400 Markdown](L400.md) explain the contracts and failure modes.
 
 The `data/documents` files are explicitly fictional inputs for a legacy arithmetic/report exercise. They are not Azure retail prices or travel research. See the evidence section of the published guide for the exact tested source revision and screenshot scope.
