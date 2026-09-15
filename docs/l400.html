@@ -1,0 +1,308 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="A source-grounded local Node.js agent harness workshop with Microsoft Foundry, MCP, approvals and an L400 engineering guide."><title>Agent Harness L400</title><script>(()=>{const param=new URLSearchParams(window.location.search).get('scoutTheme');const theme=param||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',theme)})();</script><style>:root{color-scheme:light;--cp-bg:#f7f4ef;--cp-bg-elevated:#fcfbf8;--cp-surface:#ffffff;--cp-surface-soft:#f5f5f5;--cp-border:#dedede;--cp-border-strong:#919191;--cp-text:#242424;--cp-text-muted:#5c5c5c;--cp-text-soft:#6f6f6f;--cp-accent:#b11f4b;--cp-accent-hover:#9a1a41;--cp-accent-soft:rgba(177,31,75,0.08);--cp-accent-fg:#ffffff;--cp-success:#16a34a;--cp-danger:#dc2626;--cp-warning:#f59e0b;--cp-link:#0078d4;--cp-shadow:0 18px 48px rgba(0,0,0,0.12);--cp-overlay:rgba(255,255,255,0.8);--cp-panel:rgba(255,255,255,0.86);--cp-panel-strong:rgba(255,255,255,0.96);--cp-sheen:rgba(255,255,255,0.55);--cp-highlight:rgba(177,31,75,0.12)}html[data-theme="dark"]{color-scheme:dark;--cp-bg:#3d3b3a;--cp-bg-elevated:#343231;--cp-surface:#292929;--cp-surface-soft:#2e2e2e;--cp-border:#474747;--cp-border-strong:#5f5f5f;--cp-text:#dedede;--cp-text-muted:#919191;--cp-text-soft:#b0b0b0;--cp-accent:#fd8ea1;--cp-accent-hover:#fb7b91;--cp-accent-soft:rgba(253,142,161,0.14);--cp-accent-fg:#1a1a1a;--cp-success:#4ade80;--cp-danger:#f87171;--cp-warning:#fbbf24;--cp-link:#4da6ff;--cp-shadow:0 18px 48px rgba(0,0,0,0.32);--cp-overlay:rgba(41,41,41,0.88);--cp-panel:rgba(41,41,41,0.72);--cp-panel-strong:rgba(41,41,41,0.96);--cp-sheen:rgba(255,255,255,0.04);--cp-highlight:rgba(253,142,161,0.12)}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}body{margin:0;color:var(--cp-text);background:var(--cp-surface);font:17px/1.65 'Segoe UI',Aptos,Calibri,sans-serif;letter-spacing:0}a{color:var(--cp-link);text-underline-offset:3px;overflow-wrap:anywhere}header{position:sticky;top:0;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 4%;border-bottom:1px solid var(--cp-border);background:var(--cp-panel-strong);font-size:14px}header strong{color:var(--cp-accent)}header nav{display:flex;gap:20px;flex-wrap:wrap}.layout{display:grid;grid-template-columns:245px minmax(0,980px);gap:60px;max-width:1400px;margin:auto;padding:44px 32px}aside{position:sticky;top:96px;align-self:start;max-height:calc(100vh - 120px);overflow:auto;border-left:3px solid var(--cp-accent);padding-left:20px;font-size:14px}aside a{display:block;margin-bottom:12px;color:var(--cp-text-muted);text-decoration:none}aside a:hover{color:var(--cp-accent)}main{min-width:0}h1{font-size:40px;line-height:1.15;font-weight:650;max-width:780px;margin:0 0 28px}h2{margin:64px 0 20px;padding-top:22px;border-top:1px solid var(--cp-border);font-size:27px;line-height:1.3}h3{font-size:21px;line-height:1.35;margin-top:34px}p,li{overflow-wrap:anywhere}li{margin:7px 0}pre{background:var(--cp-surface-soft);border-left:3px solid var(--cp-accent);padding:20px;overflow:auto;font:14px/1.65 Consolas,'Courier New',monospace;white-space:pre-wrap;overflow-wrap:anywhere}code{font-family:Consolas,'Courier New',monospace;font-size:.9em}p code,li code{background:var(--cp-surface-soft);padding:2px 4px}blockquote{border-left:3px solid var(--cp-accent);padding:8px 22px;margin:22px 0;background:var(--cp-accent-soft)}.table-scroll{overflow:auto}table{width:100%;border-collapse:collapse;font-size:14px;line-height:1.55}th,td{padding:14px 12px;border-bottom:1px solid var(--cp-border);text-align:left;vertical-align:top;min-width:140px}th{background:var(--cp-surface-soft);font-weight:600}img{max-width:100%;height:auto;display:block;border:1px solid var(--cp-border)}figure{margin:30px 0}figcaption,.meta{font-size:13px;color:var(--cp-text-muted);margin:12px 0}figure>a{display:block}footer{margin-top:70px;padding:25px 0;border-top:1px solid var(--cp-border);font-size:14px;color:var(--cp-text-muted)}.eyebrow{color:var(--cp-accent);font-size:13px;font-weight:600;margin-bottom:18px}.evidence-output{max-height:650px;overflow:auto}.evidence-sheet{max-width:1160px;margin:40px auto;padding:32px}.evidence-sheet h1{font-size:30px}.evidence-sheet pre{font-size:16px;max-height:none}.capture-tag{color:var(--cp-accent);font-weight:600}.screenshot{border:1px solid var(--cp-border)}@media(max-width:900px){.layout{grid-template-columns:minmax(0,1fr);padding:24px;gap:20px}aside{position:static;max-height:none;display:flex;flex-wrap:wrap;gap:10px 18px;font-size:12px}aside a{margin:0}h1{font-size:32px}header{position:static;align-items:flex-start;flex-direction:column}h2{font-size:24px;margin-top:46px}header nav{gap:16px}th,td{padding:10px}pre{font-size:13px}.evidence-sheet{padding:20px;margin:0}}@media print{header,aside{display:none}.layout{display:block;padding:0}body{font-size:11pt}h2{break-after:avoid}figure,pre{break-inside:avoid}}</style></head><body><header><strong>AGENT HARNESS / FIELD WORKSHOP</strong><nav aria-label="Primary"><a href="index.html">Workshop</a><a href="l400.html">L400</a><a href="harness.drawio">draw.io</a><a href="https://github.com/ibranibeny/agent-harness-workshop">Source</a></nav></header><div class="layout"><aside aria-label="Contents"><a href="#1-ownership-map">1. Ownership Map</a><a href="#2-protocol-the-tool-result-is-a-new-observation">2. Protocol: The Tool Result Is A New Observation</a><a href="#3-loop-and-state-machine">3. Loop And State Machine</a><a href="#4-context-persistence-and-conversation-boundaries">4. Context, Persistence And Conversation Boundaries</a><a href="#5-exact-human-approval">5. Exact Human Approval</a><a href="#6-identity-network-and-data-exposure">6. Identity, Network And Data Exposure</a><a href="#7-budgets-pacing-and-failure-semantics">7. Budgets, Pacing And Failure Semantics</a><a href="#8-artifact-and-delivery-integrity">8. Artifact And Delivery Integrity</a><a href="#9-landing-zone-from-lab-to-governed-workload">9. Landing Zone: From Lab To Governed Workload</a><a href="#10-evaluation-and-failure-injection">10. Evaluation And Failure Injection</a><a href="#11-evidence-ladder-and-release-checklist">11. Evidence Ladder And Release Checklist</a><a href="#references">References</a></aside><main><div class="eyebrow">LOCAL NODE.JS 24 / REAL FOUNDRY / CONTROLLED TOOL EXECUTION</div><h1 id="agent-harness-l400-engineering-guide">Agent Harness: L400 Engineering Guide</h1><p><strong>Audience:</strong> engineers comfortable with async JavaScript, HTTP and distributed-system failure modes. <strong>Scope:</strong> the source in <a href="https://github.com/ibranibeny/agent-harness-workshop">agent-harness-workshop</a>, not an implementation claim about every agent framework. <strong>Reviewed:</strong> 15 September 2026.</p>
+<p>The invariant is <strong>proposal is not authority</strong>. The model can propose an operation. Only the host&#39;s allowlist, schema validation, prepared arguments and exact approval decide whether it executes.</p>
+<h2 id="1-ownership-map">1. Ownership Map</h2><div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Owns</th>
+<th>Does not own</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>src/config.mjs</code></td>
+<td>Participant configuration and endpoint validation</td>
+<td>Provisioning or role assignment</td>
+</tr>
+<tr>
+<td><code>src/model.mjs</code></td>
+<td>Entra credential, identity guard, OpenAI protocol, pacing/retries</td>
+<td>Tool execution or factual correctness</td>
+</tr>
+<tr>
+<td><code>src/harness.mjs</code></td>
+<td>Message loop, dispatch order, usage budget and terminal result</td>
+<td>HTTP authorization or persistent session ownership</td>
+</tr>
+<tr>
+<td><code>src/tools.mjs</code></td>
+<td>Tool allowlist, strict local schemas, exact prepared approval</td>
+<td>Arbitrary shell, arbitrary remote endpoints</td>
+</tr>
+<tr>
+<td><code>src/connectors.mjs</code></td>
+<td>MCP transports, timeout/cancellation and response validation</td>
+<td>Model-level reasoning or approvals</td>
+</tr>
+<tr>
+<td><code>src/travel.mjs</code></td>
+<td>Dates, time zones, source URLs, PDF integrity, delivery contracts</td>
+<td>Guaranteed forecasts or working production WorkIQ writes</td>
+</tr>
+<tr>
+<td><code>src/store.mjs</code></td>
+<td>Atomic JSON replacement and correlated conversation restore</td>
+<td>Encryption, distributed locks or automatic recovery</td>
+</tr>
+<tr>
+<td><code>src/server.mjs</code></td>
+<td>Loopback HTTP, active run, approval promise, event persistence</td>
+<td>Multi-user authorization</td>
+</tr>
+<tr>
+<td><code>public/app.js</code></td>
+<td>Run selection, conversation composer, trace replay</td>
+<td>Trust decisions on model output</td>
+</tr>
+</tbody></table></div>
+<h2 id="2-protocol-the-tool-result-is-a-new-observation">2. Protocol: The Tool Result Is A New Observation</h2><p>The OpenAI adapter uses Chat Completions with strict function definitions and <code>parallel_tool_calls: false</code>. It sends the deployment name, not a model catalog ID. The wrapper strips schema keywords unsupported by the model schema subset into descriptions, while the original strict Zod schema remains authoritative for local execution. That distinction is deliberate: compatibility is not permission to relax runtime validation.</p>
+<p>The assistant proposes <code>{ id, type: &#39;function&#39;, function: { name, arguments } }</code>. The arguments are a JSON string. The host parses it, verifies that the name is allowed, validates the entire object, and only then performs an action. The observation has the following protocol shape:</p>
+<pre><code class="language-javascript">const observation = {
+  role: &#39;tool&#39;,
+  tool_call_id: call.id,
+  content: JSON.stringify(result)
+};
+messages.push(observation);
+</code></pre>
+<p>The <code>tool_call_id</code> is the correlation key. Restoring a tool result as an unrelated user message changes the protocol and obscures provenance. A tool error is also an observation, not a reason to invent a successful result. The model can explain the limitation, correct its arguments or request clarification in another bounded iteration.</p>
+<p>The harness defensively handles at most six calls in one model response, executing them sequentially. Serial tool dispatch does not mean predefined sequential multi-agent orchestration. There is one model-driven agent, not a planner agent delegating to researcher agents.</p>
+<h2 id="3-loop-and-state-machine">3. Loop And State Machine</h2><p><img src="assets/agent-workflow.drawio.png" alt="Execution and approval loop"></p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>State</th>
+<th>Meaning</th>
+<th>Exit condition</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>running</code></td>
+<td>Model request or tool work is in progress</td>
+<td>Answer, approval, error, cancellation or limit</td>
+</tr>
+<tr>
+<td><code>awaiting_approval</code></td>
+<td>Exact prepared proposal waits on a human decision</td>
+<td>Matching one-use approval ID, denial or abort</td>
+</tr>
+<tr>
+<td><code>completed</code></td>
+<td>Nonempty assistant response without calls accepted within limits</td>
+<td>Terminal; may be a clarification or limitation</td>
+</tr>
+<tr>
+<td><code>limited</code></td>
+<td>Step or cumulative token budget reached</td>
+<td>Terminal; not proof the task succeeded</td>
+</tr>
+<tr>
+<td><code>failed</code></td>
+<td>Runtime/adapter error prevented completion</td>
+<td>Terminal; inspect error and last observations</td>
+</tr>
+<tr>
+<td><code>cancelled</code></td>
+<td>Abort signal stopped the execution</td>
+<td>Terminal; remote work may have already occurred</td>
+</tr>
+<tr>
+<td><code>interrupted</code></td>
+<td>Startup found an unfinished prior run</td>
+<td>Terminal; no automatic approval or action resume</td>
+</tr>
+</tbody></table></div>
+<p>Completion accepts only adapter finish reasons <code>stop</code> and <code>tool_calls</code>. Truncated output is an error. A final answer is not proof of tool execution, artifact creation, factual accuracy or external delivery. Evaluate those outcomes independently.</p>
+<p>Sequential Thinking is optional. All enabled tools are offered in the first request, with no forced <code>tool_choice</code>. Simple weather or attractions queries can search directly; missing details can produce an immediate clarifying answer. The actual local MCP server records at most eight public updates when selected. It does not search, verify facts, run the suggested <code>nextStep</code>, or authorize writes. Public summaries contain goals, constraints and observations, not private chain-of-thought.</p>
+<h2 id="4-context-persistence-and-conversation-boundaries">4. Context, Persistence And Conversation Boundaries</h2><p>Working context is current system instructions, validated restored history, current user prompt, and in-loop assistant/tool messages. It grows with observations. The implementation does not perform automatic summarization, compaction, semantic retrieval or vector-memory indexing.</p>
+<p>A reply carries <code>parentRunId</code>. <code>readConversation</code> walks completed ancestors, identifies the conversation root and reconstructs user messages, assistant responses and exact call/result pairs. The maximum is 16 ancestors and 80,000 serialized history characters. Cycles, missing runs, invalid IDs, noncompleted parents and incomplete or duplicate tool pairings fail closed. Old system messages are not imported. Old tool results are retained as evidence but tools are not replayed.</p>
+<p>The conversation ID is a linkage identifier, <strong>not an authorization boundary</strong>. This loopback single-user lab does not verify per-user ownership. Before hosting, map user-visible sessions to authenticated tenant/user ownership and enforce it on every read, continuation, download, approval and cancellation. Microsoft Learn&#39;s <a href="https://learn.microsoft.com/agent-framework/concepts/agents/conversations/session">session guidance</a> explicitly warns against treating service conversation IDs as user authorization.</p>
+<p>Preference memory is separate JSON state, exposed only when enabled. Reads require relevance; writes require exact approval. The local MCP&#39;s planning state is a third mechanism, fresh per execution. A recreated planning process does not erase persisted conversation history.</p>
+<p><code>writeJson</code> uses a temporary file and atomic replacement with bounded retry for transient Windows rename locks. Per-run events are persisted in order. This provides useful local evidence; it is not a multi-process transaction system. Startup marks unfinished runs interrupted rather than attempting unsafe recovery. There is no durable workflow checkpoint that can resume a suspended JavaScript promise.</p>
+<h2 id="5-exact-human-approval">5. Exact Human Approval</h2><p>The tool registry prepares and validates a proposal before requesting approval. The server binds <code>{callId, name, args}</code> to a random approval ID and the active run. The browser previews those arguments. Only a matching decision resolves the pending one-use promise; stale IDs, other runs and repeated decisions are rejected.</p>
+<p>Denial returns a structured observation without performing the write. Cancellation/timeout aborts the pending wait. History can contain the old proposal and denial, but cannot restore permission. A reply saying &quot;approve&quot; is ordinary text, not the approval API. The model cannot use planning as permission.</p>
+<p>This is narrower than some framework configurations that support standing approvals. This lab intentionally does not implement &quot;always approve,&quot; model-driven auto-approval or permission inherited from earlier turns. Compare <a href="https://learn.microsoft.com/agent-framework/agents/tools/tool-approval">Microsoft Learn tool approval</a>, while keeping this custom Node implementation&#39;s actual behavior distinct.</p>
+<h2 id="6-identity-network-and-data-exposure">6. Identity, Network And Data Exposure</h2><p><code>AzureDeveloperCliCredential</code> is explicit and tenant-scoped. The application does not probe other identities through a default credential chain. It requests <code>https://ai.azure.com/.default</code>, decodes claims for a local account/tenant guard and lets Azure validate the actual token and permissions. Decoding claims alone is not cryptographic token validation.</p>
+<p>The exported configuration rejects placeholder identity/deployment values before token acquisition and validates the commercial Azure OpenAI endpoint form. Metadata validation is not an Azure resource lookup. Doctor verifies identity, whereas a real inference call tests data-plane access. An Azure resource owner must grant appropriate inference permissions in advance; the application cannot do so.</p>
+<p>Browser mutations require a local session token, permitted Host/Origin, JSON content type and bounded request body. Content Security Policy and safe text rendering reduce browser injection risk. The session token is a local anti-cross-origin control, not enterprise authentication. Do not publish the local server or <code>/api/state</code> response.</p>
+<p>WebIQ uses the configured fixed MCP endpoint and an approved server-side key. It allows only <code>web</code>; its content is untrusted. Instructions embedded in research results must not override the system or grant tool permissions. Tools restrict filenames, dates, URLs and output sizes, but this is not a complete prompt-injection defense or data-loss-prevention system.</p>
+<p>Local files remaining on the laptop does not mean local-only data processing: prompt text, restored history, tool results and retrieved memory are sent to Foundry. WebIQ receives search queries. Traces contain those observations. Use nonsensitive data and explicit retention rules. The application does not encrypt runtime files.</p>
+<h2 id="7-budgets-pacing-and-failure-semantics">7. Budgets, Pacing And Failure Semantics</h2><div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Value / behavior</th>
+<th>Important limitation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Model iterations</td>
+<td>Default 12; API accepts 1-16</td>
+<td>A tool call consumes a turn; another is needed to interpret results</td>
+</tr>
+<tr>
+<td>Cumulative tokens</td>
+<td>Default soft limit 100,000</td>
+<td>Checked after a response; usage may overshoot before stopping</td>
+</tr>
+<tr>
+<td>Completion allowance</td>
+<td>2,200 tokens per model response</td>
+<td>Part of request admission; not the total run budget</td>
+</tr>
+<tr>
+<td>Run deadline</td>
+<td>15 minutes, including approval waits</td>
+<td>Human delay can consume the entire deadline</td>
+</tr>
+<tr>
+<td>SDK timeout/retries</td>
+<td>90 seconds; two retries</td>
+<td>Retries add latency and possible usage</td>
+</tr>
+<tr>
+<td>Model dispatch</td>
+<td>Serialized; local pacing</td>
+<td>Other processes and participants are not coordinated</td>
+</tr>
+<tr>
+<td>WebIQ handshake/call</td>
+<td>20-second handshake, 60-second call, 80-second operation bound</td>
+<td>Aborts are best effort across remote boundaries</td>
+</tr>
+<tr>
+<td>Planning</td>
+<td>At most eight MCP updates</td>
+<td>More plan text consumes context and model turns</td>
+</tr>
+</tbody></table></div>
+<p>The adapter estimates request size as <code>ceil((serialized messages + schemas).length / 3) + 2200</code>. Its request-spacing estimate is the larger of a request-rate interval plus 500 ms and the estimated-token interval. This is a coarse pacing heuristic, not a provider tokenizer or distributed quota reservation.</p>
+<p>For the reference 50 RPM / 50,000 TPM configuration, a 25,000-token estimate yields a 30-second token-based interval. A different deployment must supply its own values. Increasing the 100,000 cumulative budget does not increase TPM, a model&#39;s context window, or the deployment&#39;s admission capacity. A request larger than what a deployment admits may keep failing despite waiting.</p>
+<p><code>model_request</code> is emitted before pacing and transport. It proves an iteration was prepared, not that Azure received it. <code>rate_wait</code> proves deliberate delay, not a 429. Use the actual response/request IDs, error and usage metadata for provider evidence. No token-cost estimate is presented as an invoice.</p>
+<h2 id="8-artifact-and-delivery-integrity">8. Artifact And Delivery Integrity</h2><p>The travel schema validates real calendar dates, ordered date ranges, maximum duration, time-zone mapping, one day entry for each travel date, bounded text and HTTP(S) sources. PDFKit writes an A4 document only after approval, with exclusive per-run filenames, a size limit, byte count and SHA-256 hash. The companion itinerary JSON is used for later delivery preparation.</p>
+<p>These controls establish local artifact consistency, not factual truth. A source URL is attribution, not automatic verification. The model must compare dates and source coverage. Weather search reports <code>forecastVerified: false</code> because retrieval alone has not validated a forecast.</p>
+<p>Email/calendar tool contracts refer to that run&#39;s saved artifact and need separate recipient/attendee approval. The production WorkIQ write connector is not implemented in this snapshot. An editor&#39;s connected M365 tools do not authenticate this runtime. Tests inject controlled connectors to validate payload/approval contracts; that is not live mail or calendar evidence.</p>
+<p>The delivery code records attempts before remote calls and blocks ambiguous resubmission. This is not an exactly-once guarantee: a crash between remote acceptance and local receipt persistence can still leave uncertainty. A production design needs operation IDs, idempotency support, reconciliation and audit ownership.</p>
+<h2 id="9-landing-zone-from-lab-to-governed-workload">9. Landing Zone: From Lab To Governed Workload</h2><p><img src="assets/landing-zone.drawio.png" alt="Reference platform and workload boundaries"></p>
+<p>The diagram is a design reference, not evidence of deployed resources. Apply <a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/">Cloud Adoption Framework landing-zone guidance</a> and the <a href="https://learn.microsoft.com/azure/architecture/ai-ml/architecture/baseline-microsoft-foundry-landing-zone">Foundry landing-zone baseline</a> to your organization&#39;s requirements.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Boundary</th>
+<th>Platform responsibility</th>
+<th>Workload responsibility</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Identity</td>
+<td>Tenant policies, privileged access, role-assignment process</td>
+<td>Least-privilege runtime identity; per-user session authorization</td>
+</tr>
+<tr>
+<td>Governance</td>
+<td>Management groups, subscription vending, baseline Policy</td>
+<td>Resource tags, data classification, budget and quota requests</td>
+</tr>
+<tr>
+<td>Connectivity</td>
+<td>Hub, approved hybrid path, Firewall, central private DNS</td>
+<td>Spoke integration, endpoint dependencies and egress allowlist</td>
+</tr>
+<tr>
+<td>Foundry</td>
+<td>Regional and model governance; optional shared AI gateway</td>
+<td>Resource/project/deployment ownership and inference configuration</td>
+</tr>
+<tr>
+<td>Operations</td>
+<td>Central monitoring and security collection standards</td>
+<td>Redacted spans, SLOs, runbooks and evaluation gates</td>
+</tr>
+<tr>
+<td>State</td>
+<td>Approved storage/security patterns</td>
+<td>Durable conversation/approval store, retention and recovery</td>
+</tr>
+</tbody></table></div>
+<p>A local developer reaching private Foundry needs private DNS resolution and network line of sight through an approved VPN/ExpressRoute or equivalent access path. Creating a private endpoint without those dependencies breaks connectivity. Public MCP services still need an outbound policy; Private Link to Foundry does not privatize WebIQ.</p>
+<p>A hosted extension could use a managed identity, authenticated API, scalable state store and controlled tool environment. The current Node server must not simply be exposed behind a public URL. Microsoft reference architectures may include App Service, Agent Service, Azure AI Search, Cosmos DB, Storage and Key Vault for different responsibilities. Choose what the actual design requires; do not describe these as installed lab components. Global deployment SKUs can process inference outside the resource region; confirm the chosen SKU&#39;s current residency guarantees before using regulated data.</p>
+<h2 id="10-evaluation-and-failure-injection">10. Evaluation And Failure Injection</h2><div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Test / experiment</th>
+<th>Expected evidence</th>
+<th>Failure it catches</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Direct weather/destination without planning</td>
+<td>Search present in first request, no forced tool choice</td>
+<td>Accidental mandatory planning regression</td>
+</tr>
+<tr>
+<td>Malformed or extra arguments</td>
+<td>Rejection before approval/execute</td>
+<td>Schema drift or allowlist bypass</td>
+</tr>
+<tr>
+<td>Deny export</td>
+<td>Denied observation, missing output file</td>
+<td>Write performed before decision</td>
+</tr>
+<tr>
+<td>Replay wrong approval ID</td>
+<td>HTTP 409, no action</td>
+<td>Stale or cross-run permission reuse</td>
+</tr>
+<tr>
+<td>Reply to completed draft</td>
+<td>Paired prior observations, same conversation root</td>
+<td>Lost context or action replay</td>
+</tr>
+<tr>
+<td>Incomplete restored tool history</td>
+<td>Explicit restoration failure</td>
+<td>Protocol corruption</td>
+</tr>
+<tr>
+<td>Max steps / token boundary</td>
+<td><code>limited</code>, no unauthorized follow-on action</td>
+<td>Unbounded agent loop</td>
+</tr>
+<tr>
+<td>Stalled MCP initialization</td>
+<td>Abort propagated through deadline</td>
+<td>Unbounded connector hang</td>
+</tr>
+<tr>
+<td>Browser history race</td>
+<td>Newer selection/draft preserved</td>
+<td>Late response overwrites user work</td>
+</tr>
+<tr>
+<td>Unavailable delivery</td>
+<td>Explicit failure, no sent claim</td>
+<td>Fabricated external side effects</td>
+</tr>
+</tbody></table></div>
+<p>Production evaluation should also measure source correctness, tool-selection accuracy, task success, denial compliance, prompt-injection resilience, cost per successful task and p50/p95 latency across a fixed dataset. Compare optional planning against no planning on equivalent tasks; more planning events are not a quality metric. No automated Foundry evaluation suite or quality score is claimed here.</p>
+<h2 id="11-evidence-ladder-and-release-checklist">11. Evidence Ladder And Release Checklist</h2><ol>
+<li>A prompt establishes intent.</li>
+<li><code>model_request</code> establishes prepared context and tool availability.</li>
+<li><code>model_response</code> establishes returned model output and reported usage.</li>
+<li><code>tool_call</code> establishes a proposal, not execution success.</li>
+<li><code>tool_result</code> establishes the observed response or error.</li>
+<li>Approval events establish one decision for one proposal.</li>
+<li>An artifact hash or provider receipt supports a specific action outcome.</li>
+<li>Independent inspection establishes whether the user&#39;s actual objective was met.</li>
+</ol>
+<p>Before release, require tests on the exact revision, live read-only integration evidence, independent artifact checks when writes are approved, per-user authorization, durable recovery semantics, secrets and log review, dependency scanning, capacity planning, deployment rollback and a human escalation path. This repository is an educational local harness, not a production-certified agent platform.</p>
+<h2 id="references">References</h2><ul>
+<li><a href="https://learn.microsoft.com/azure/architecture/ai-ml/guide/ai-agent-design-patterns">AI agent orchestration patterns</a></li>
+<li><a href="https://learn.microsoft.com/azure/developer/ai/intro-agents-mcp">MCP and AI agents</a></li>
+<li><a href="https://learn.microsoft.com/agent-framework/concepts/agents/conversations/session">Sessions and conversation state</a></li>
+<li><a href="https://learn.microsoft.com/agent-framework/agents/tools/tool-approval">Tool approval</a></li>
+<li><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/">Azure landing zones</a></li>
+<li><a href="https://learn.microsoft.com/azure/architecture/ai-ml/architecture/baseline-microsoft-foundry-landing-zone">Foundry in an Azure landing zone</a></li>
+<li><a href="https://learn.microsoft.com/javascript/api/@azure/identity/azuredeveloperclicredential">AzureDeveloperCliCredential for JavaScript</a></li>
+</ul>
+<p>The material is an original explanation of this implementation. Learn&#39;s SDK examples and hosted-service diagrams are references, not code used by this Node runtime. The separate <a href="https://github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking">Sequential Thinking reference server</a> is an optional third-party MCP dependency, not a Microsoft requirement.</p>
+<footer>Original workshop material grounded in Microsoft Learn and the linked implementation. Static documentation only. <a href="L400.md">Download Markdown</a>.</footer></main></div></body></html>

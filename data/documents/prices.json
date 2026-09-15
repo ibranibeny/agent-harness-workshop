@@ -1,0 +1,9 @@
+{
+  "currency": "IDR",
+  "source": "ContosoDemo public workshop fixture; not a vendor quote",
+  "items": [
+    { "label": "Workshop room per day", "unitCost": 800000 },
+    { "label": "Meal package per participant", "unitCost": 35000 },
+    { "label": "Digital workbook per participant", "unitCost": 0 }
+  ]
+}

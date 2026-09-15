@@ -1,0 +1,26 @@
+{
+  "name": "agent-harness-lab",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env src/server.mjs",
+    "test": "node --test tests/unit.test.mjs",
+    "test:live": "node --env-file-if-exists=.env --test tests/live.test.mjs",
+    "doctor": "node --env-file-if-exists=.env src/doctor.mjs"
+  },
+  "dependencies": {
+    "@azure/identity": "4.13.3",
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "@modelcontextprotocol/server-sequential-thinking": "2026.8.31",
+    "jsonc-parser": "3.3.1",
+    "lucide": "1.42.0",
+    "openai": "7.10.0",
+    "pdfkit": "0.20.2",
+    "windows-iana": "5.1.0",
+    "zod": "4.5.4"
+  }
+}

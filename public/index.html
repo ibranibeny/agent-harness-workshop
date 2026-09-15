@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Travel Agent Harness Lab</title>
+  <link rel="icon" href="data:,">
+  <script nonce="__NONCE__">
+    (() => {
+      const param = new URLSearchParams(window.location.search).get("scoutTheme");
+      const theme = param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/lucide.js" defer></script>
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><i data-lucide="workflow"></i><h1>Travel Agent Harness Lab</h1><span class="tag">ContosoDemo</span></div>
+    <div class="top-actions"><span id="connection" class="connection">Connecting</span><a href="/workshop" target="_blank" title="Workshop guide" aria-label="Workshop guide"><i data-lucide="book-open"></i></a><a href="/l400" target="_blank" title="L400 deep dive" aria-label="L400 deep dive"><i data-lucide="file-code-2"></i></a><button id="theme" class="icon-button" title="Switch theme" aria-label="Switch theme"><i data-lucide="sun-moon"></i></button></div>
+  </header>
+  <div id="error" class="error-banner" role="alert" hidden></div>
+  <main class="workspace">
+    <aside class="navigation">
+      <p class="eyebrow">WORKSPACE</p>
+      <nav aria-label="Lab navigation">
+        <button id="tab-overview" class="nav-item active" aria-pressed="true" title="Overview"><i data-lucide="layout-dashboard"></i>Overview</button>
+        <button id="tab-trace" class="nav-item" aria-pressed="false" title="Trace"><i data-lucide="list-tree"></i>Trace</button>
+        <button id="tab-memory" class="nav-item" aria-pressed="false" title="Memory"><i data-lucide="database"></i>Memory</button>
+        <button id="tab-runtime" class="nav-item" aria-pressed="false" title="Runtime"><i data-lucide="settings-2"></i>Runtime</button>
+      </nav>
+      <div class="nav-meta">Node.js / local<br><span>Microsoft Foundry</span><strong id="model-name">-</strong></div>
+      <a class="guide-link" href="/workshop" target="_blank"><i data-lucide="book-open"></i>Workshop</a>
+      <a class="guide-link" href="/l400" target="_blank"><i data-lucide="file-code-2"></i>L400 deep dive</a>
+    </aside>
+    <section class="run-pane">
+      <div class="run-heading"><div><p class="eyebrow">OVERVIEW / SELECTED RUN</p><h2 id="run-title">New run</h2></div><span id="run-status" class="status">Ready</span></div>
+      <div class="metrics">
+        <div><strong id="tokens">0</strong><span>Actual tokens</span></div><div><strong id="elapsed">-</strong><span>Run duration</span></div><div><strong id="model-calls">0</strong><span>LLM responses</span></div><div><strong id="tool-calls">0</strong><span>Tool calls</span></div><div><strong id="memory-count">0</strong><span>Saved memories</span></div><div><strong id="event-count">0</strong><span>Events</span></div>
+      </div>
+      <div id="overview-panel">
+        <div class="phase-strip"><i data-lucide="activity"></i><strong id="execution-phase">No recorded events</strong><span id="playback-mode">Live / latest event</span></div>
+        <section class="architecture" aria-label="Interactive agent harness architecture">
+          <div class="section-heading"><h2>Architecture</h2><span class="muted">Iteration <b id="steps">0</b></span></div>
+          <div class="graph-boundary">
+            <p class="boundary-label">LOCAL HARNESS / CLOUD MODEL BOUNDARY MARKED</p>
+            <div class="flow-row">
+              <button class="graph-node" data-node="gateway" aria-pressed="false"><i data-lucide="messages-square"></i><strong>Gateway</strong><small>prompt + configuration</small></button><i class="flow-arrow" data-lucide="arrow-right"></i>
+              <button class="graph-node" data-node="context" aria-pressed="true"><i data-lucide="layers"></i><strong>Working context</strong><small id="context-size">Not assembled yet</small></button><i class="flow-arrow" data-lucide="arrow-right"></i>
+              <button class="graph-node cloud-node" data-node="llm" aria-pressed="false"><i data-lucide="brain-circuit"></i><strong>LLM agent</strong><small>Foundry / CLOUD</small></button><i class="flow-arrow" data-lucide="arrow-right"></i>
+              <button class="graph-node" data-node="reply" aria-pressed="false"><i data-lucide="message-square-text"></i><strong>Reply</strong><small>final response</small></button>
+            </div>
+            <div class="loop-return"><i data-lucide="corner-left-up"></i><span>tool result back to context / next iteration</span><i data-lucide="corner-down-left"></i></div>
+            <div class="control-row">
+              <button class="graph-node" data-node="guard" aria-pressed="false"><i data-lucide="shield"></i><strong>Execution limits</strong><small>steps / tokens / cancel</small></button><span class="edge-label">tool call</span>
+              <button class="graph-node" data-node="tools" aria-pressed="false"><i data-lucide="wrench"></i><strong>Tools</strong><small>validate + dispatch</small></button><i class="flow-arrow" data-lucide="arrow-right"></i>
+              <button class="graph-node" data-node="approval" aria-pressed="false"><i data-lucide="shield-check"></i><strong>Human approval</strong><small>before writes only</small></button>
+            </div>
+            <div class="storage-heading"><span>PLANNING, INSTRUCTIONS &amp; STATE</span><span>durable != automatically in context</span></div>
+            <div class="storage-row">
+              <button class="graph-node" data-node="planning" aria-pressed="false"><i data-lucide="list-ordered"></i><strong>Sequential Thinking</strong><small>local MCP / public plan updates</small></button>
+              <button class="graph-node" data-node="instructions" aria-pressed="false"><i data-lucide="file-code-2"></i><strong>System instructions</strong><small>rules at the start of every run</small></button>
+              <button class="graph-node" data-node="memory" aria-pressed="false"><i data-lucide="database"></i><strong>Preference memory</strong><small>JSON / read + approved write</small></button>
+              <button class="graph-node" data-node="trace" aria-pressed="false"><i data-lucide="scan-line"></i><strong>Trace &amp; history</strong><small>events / request IDs / usage</small></button>
+            </div>
+          </div>
+          <div class="playback" aria-label="Recorded event replay"><button id="event-prev" class="icon-button" title="Previous event" aria-label="Previous event" disabled><i data-lucide="step-back"></i></button><input id="event-slider" type="range" min="0" max="0" value="0" aria-label="Event position" disabled><button id="event-next" class="icon-button" title="Next event" aria-label="Next event" disabled><i data-lucide="step-forward"></i></button><span id="event-position">0 / 0</span><button id="event-live" title="Return to the latest event" aria-pressed="true"><i data-lucide="radio"></i>Live</button></div>
+        </section>
+        <section class="inspector"><div class="section-heading"><h2 id="inspector-title">Working context</h2><span id="inspector-kind" class="muted"></span></div><p id="inspector-description"></p><code id="inspector-source"></code><details><summary>Evidence at selected event</summary><pre id="inspector-evidence"></pre></details></section>
+      </div>
+      <section id="trace-panel" hidden><div class="section-heading"><h2>Execution trace</h2><div class="downloads"><a id="download-trace" hidden title="Download trace JSON" aria-label="Download trace JSON"><i data-lucide="file-json"></i></a><a id="download-report" hidden title="Download Markdown report" aria-label="Download Markdown report"><i data-lucide="download"></i></a></div></div><div id="trace" class="trace"><p class="empty">No execution yet.</p></div></section>
+      <section id="memory-panel" hidden><div class="section-heading"><h2>Preference memory</h2><span class="tag">CURRENT DISK STATE</span></div><div id="memory"><p class="empty">No saved preferences.</p></div><p class="memory-note">Not a replay snapshot. Values enter context only when read_memory is called.</p></section>
+      <section id="runtime-panel" hidden><div class="section-heading"><h2>Identity and endpoint</h2></div><dl id="identity" class="identity"></dl><div class="runtime-columns"><section class="limits"><h2>Execution limits</h2><dl><dt>Active runs</dt><dd>1</dd><dt>Timeout</dt><dd>15 minutes</dd><dt>Soft token budget</dt><dd>100,000</dd><dt>SDK retries</dt><dd>At most 2</dd><dt>Shell access</dt><dd>Not available</dd></dl></section><section><h2>Tokens per response</h2><canvas id="usage-chart" width="280" height="120" aria-label="Actual tokens per model response"></canvas><p id="usage-caption" class="muted">No usage recorded.</p></section></div></section>
+    </section>
+    <aside class="chat-pane">
+      <div class="section-heading"><h2>Chat</h2><span id="chat-status" class="muted">Conversation</span></div>
+      <div class="chat-toolbar"><button id="new-run"><i data-lucide="plus"></i>New conversation</button><button id="continue-run" class="icon-button" title="Reply to selected run" aria-label="Reply to selected run" disabled><i data-lucide="reply"></i></button><details class="history-dropdown"><summary>History</summary><div id="history" class="history"><p class="empty">No runs yet.</p></div></details><button id="refresh" class="icon-button" title="Refresh" aria-label="Refresh"><i data-lucide="refresh-cw"></i></button></div>
+      <div class="conversation"><div class="chat-label">USER / SELECTED RUN</div><p id="chat-user" class="user-message">No request yet.</p><div class="chat-label">TRAVEL PLANNER / FOUNDRY</div><pre id="answer" class="answer">No answer yet.</pre></div>
+      <a id="download-pdf" class="guide-link" hidden title="Download saved itinerary PDF"><i data-lucide="file-down"></i>Itinerary PDF</a>
+      <section id="approval" class="approval" hidden aria-live="polite"><div class="section-heading"><h2>Active run approval</h2><i data-lucide="shield-check"></i></div><p id="approval-name"></p><pre id="approval-preview"></pre><div class="actions"><button id="approve" class="primary"><i data-lucide="check"></i>Approve</button><button id="deny"><i data-lucide="x"></i>Deny</button></div></section>
+      <form id="task-form"><label for="scenario">Scenario</label><select id="scenario"><option value="travel">Plan trip + PDF</option><option value="memory">Remember travel preferences</option><option value="recall">Use saved memory</option><option value="budget">Legacy workshop budget</option><option value="custom">Custom task</option></select><label id="prompt-label" for="prompt">New conversation message</label><textarea id="prompt" rows="5" maxlength="4000" required></textarea><div class="controls"><label class="switch"><input id="memory-enabled" type="checkbox" checked>Preference memory</label><label class="step-control" for="max-steps">Max steps <input id="max-steps" type="number" min="1" max="16" value="12" required></label></div><div class="actions"><button id="start" class="primary" type="submit"><i data-lucide="arrow-up"></i><span id="start-label">Run</span></button><button id="cancel" type="button" class="icon-button" title="Cancel active run" aria-label="Cancel active run" disabled><i data-lucide="square"></i></button></div></form>
+    </aside>
+  </main>
+  <footer><span id="runtime-path">Local Node.js / Microsoft Foundry</span><span id="last-event">-</span></footer>
+</body>
+</html>
