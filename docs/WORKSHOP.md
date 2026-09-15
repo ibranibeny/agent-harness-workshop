@@ -4,6 +4,30 @@ Build and inspect a local travel-planning agent that uses real Microsoft Foundry
 
 **Audience:** developers and solution architects. **Duration:** 150 minutes, with an optional 60-minute L400 extension. **Reviewed:** 15 September 2026. The public source is [ibranibeny/agent-harness-workshop](https://github.com/ibranibeny/agent-harness-workshop).
 
+## Recorded Walkthrough
+
+This silent, real-time recording starts a new conversation at `http://127.0.0.1:4317/`, runs actual Foundry inference and WebIQ research, opens **Trace**, and continues to an exact PDF approval preview. The demonstration selects **Deny**. No PDF, memory, email or calendar write is approved. This is real execution, not simulated provider output.
+
+<video id="lab-walkthrough" controls playsinline preload="metadata" width="1440" height="1000" style="width:100%;height:auto;aspect-ratio:36/25" poster="assets/walkthrough-poster.png">
+	<source src="assets/lab-walkthrough.webm" type="video/webm">
+	<track kind="captions" src="assets/walkthrough.vtt" srclang="en" label="English chapter captions">
+	<a href="assets/lab-walkthrough.webm">Open the recorded walkthrough</a>.
+</video>
+
+Recorded 15 September 2026, approximately 5 minutes 36 seconds. Privacy overlays hide identity, local paths, saved-memory contents and prior-run content; the original lab is not reset. Chapter times are approximate. Captions describe the stages, and waits for the model remain visible. The recording browser used styling only for redaction; server code and approval checks were unchanged.
+
+| Time | What to inspect |
+|---|---|
+| [00:00](assets/lab-walkthrough.webm#t=0) | New conversation, prompt, memory disabled and eight-step limit |
+| [01:50](assets/lab-walkthrough.webm#t=110) | Trace: actual WebIQ calls and returned observations |
+| [02:11](assets/lab-walkthrough.webm#t=131) | Model response, request ID and actual token usage |
+| [02:25](assets/lab-walkthrough.webm#t=145) | Continue the same conversation without repeating research |
+| [03:51](assets/lab-walkthrough.webm#t=231) | PDF arguments and the `approval_requested` event |
+| [04:27](assets/lab-walkthrough.webm#t=267) | Deny the exact write proposal |
+| [04:47](assets/lab-walkthrough.webm#t=287) | `denied: true`, final response, and no PDF (`404`) |
+
+[Download the redacted execution trace](walkthrough-trace.json) for both demonstration runs. The research run completed with five model responses and 47,746 tokens; its continuation used two responses and 35,553 tokens. Trace playback itself makes no inference calls. Source results and weather caveats remain observations, not independent verification of every travel claim.
+
 ## 1. Learning Outcomes
 
 By the end, you should be able to explain why an agent needs a loop, distinguish a model's proposal from permission to act, trace a real MCP result back to its call, continue a conversation without re-executing old actions, and identify the boundary between a local lab and an Azure landing zone.
@@ -45,7 +69,7 @@ Use nonsensitive workshop data. The sample dates are 19-20 September 2026 in `As
 
 ![Current local lab architecture](assets/lab-architecture.drawio.png)
 
-Download the editable [three-page draw.io file](harness.drawio). Page 1 is the actual application design; page 2 is an undeployed landing-zone reference; page 3 is the execution flow.
+Download the editable [three-page draw.io file](harness.drawio). Page 1 is the local application design; page 2 shows the workshop's Azure services and connection boundaries; page 3 is the execution flow.
 
 | Component | Location and role | Required for this lab? |
 |---|---|---|
@@ -61,15 +85,15 @@ Download the editable [three-page draw.io file](harness.drawio). Page 1 is the a
 | WorkIQ / Microsoft 365 | Planned delivery boundary | Unavailable; no working email/calendar writes |
 | App Service, VNet, Firewall, Private Link | Possible production design components | Not provisioned by this workshop |
 
-### Azure Landing Zone Reference
+### Workshop Architecture
 
-![Undeployed landing zone reference](assets/landing-zone.drawio.png)
+![Workshop architecture with Azure service icons](assets/workshop-architecture.drawio.png)
 
-An Azure landing zone is an organizational foundation, not simply a resource group. The **platform landing zone** provides shared identity, governance, connectivity and management. **Application landing zones** host workload resources within those guardrails. See [What is an Azure landing zone?](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/) and the [Foundry landing-zone reference architecture](https://learn.microsoft.com/azure/architecture/ai-ml/architecture/baseline-microsoft-foundry-landing-zone).
+The harness runs on the participant's computer. An existing **Azure subscription and resource group** own the **Microsoft Foundry resource**, its **project**, and a compatible **model deployment**. The project provides development context; the OpenAI client calls the parent resource's model endpoint directly. This is not a hosted Foundry Agent Service deployment.
 
-For an enterprise extension, agree management-group placement, subscription ownership, region and residency, least-privilege RBAC, quotas and budgets first. A platform team can own hub connectivity, VPN/ExpressRoute, Firewall and private DNS. A workload team owns the Foundry resource, application configuration, tool contracts and data lifecycle. Private-endpoint DNS and a routed path are required before a local computer can use a private Foundry endpoint. Allowlisted external MCP traffic still needs an approved egress path.
+**Microsoft Entra ID** authenticates the selected developer through Azure Developer CLI. The local client uses that credential for HTTPS inference. The harness, not the model service, validates and executes tool calls: remote WebIQ MCP performs authorized read-only research, optional Sequential Thinking runs as a local Node subprocess, and approved files stay in the local runtime directory outside OneDrive.
 
-This workshop does not deploy that architecture. It does not include App Service authentication, managed-identity hosting, centralized logs, durable distributed state, or Private Link. The Microsoft baseline includes hosted Agent Service and other dependencies; those are **not prerequisites for this custom local model client**. Do not provision every box merely to run the lab.
+Azure components use unmodified [official Azure architecture icons](https://learn.microsoft.com/azure/architecture/icons/) (V24) and [Microsoft Entra architecture icons](https://learn.microsoft.com/entra/architecture/architecture-icons) (October 2023), under their documentation and training terms. Neutral shapes represent local code and external connectors. Subscription and resource-group outlines indicate ownership, not network isolation. No VNet, Firewall, Private Link, App Service or cloud storage is provisioned by this workshop. WorkIQ email/calendar writes remain unavailable. See the [L400 guide](L400.md) for the separate enterprise landing-zone extension.
 
 ## 4. The Agentic Workflow
 

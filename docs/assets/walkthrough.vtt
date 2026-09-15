@@ -1,0 +1,33 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:14.085
+New conversation; previous run and personal metadata hidden
+
+2
+00:00:14.085 --> 00:01:50.075
+Real Foundry inference and WebIQ research
+
+3
+00:01:50.075 --> 00:02:11.160
+Execution trace: actual requests, tool calls and results
+
+4
+00:02:11.160 --> 00:02:24.902
+Model response metadata and actual token usage
+
+5
+00:02:24.902 --> 00:03:51.327
+Continue the conversation without repeating research
+
+6
+00:03:51.327 --> 00:04:27.381
+Exact PDF approval preview and approval_requested trace
+
+7
+00:04:27.381 --> 00:04:47.012
+Deny the proposed PDF write
+
+8
+00:04:47.012 --> 00:05:35.800
+Trace verifies denied:true; PDF endpoint returned 404
